@@ -1,6 +1,7 @@
-package org.federiconafria.services;
+package org.federiconafria.transfer.services;
 
-import org.federiconafria.entities.Account;
+import org.federiconafria.transfer.entities.Account;
+import org.federiconafria.transfer.services.exceptions.AccountNotFoundException;
 
 import java.math.BigDecimal;
 
@@ -23,11 +24,11 @@ public class AccountService {
         storage.insertAccount(new Account(idProvider.generateNextId(), inputData));
     }
 
-    public Account getAccount(long id) {
+    public Account getAccount(long id) throws AccountNotFoundException {
         try {
             return storage.getAccount(id);
-        } catch (AccountStorage.AccountNotFoundException e) {
-            throw new IllegalArgumentException("Account does not exist");
+        } catch (AccountNotFoundException e) {
+            throw e;
         }
     }
 }

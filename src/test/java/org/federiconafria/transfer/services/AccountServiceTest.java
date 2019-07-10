@@ -1,7 +1,8 @@
-package org.federiconafria.services;
+package org.federiconafria.transfer.services;
 
-import org.federiconafria.entities.Account;
-import org.federiconafria.entities.Currency;
+import org.federiconafria.transfer.entities.Account;
+import org.federiconafria.transfer.entities.Currency;
+import org.federiconafria.transfer.services.exceptions.AccountNotFoundException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -63,15 +64,15 @@ public class AccountServiceTest {
     }
 
     @Test
-    public void retrieveAccount_NotFound() throws AccountStorage.AccountNotFoundException {
+    public void retrieveAccount_NotFound() throws AccountNotFoundException {
         Mockito.when(storage.getAccount(Mockito.eq(3L)))
-                .thenThrow(new AccountStorage.AccountNotFoundException());
-        expectedException.expect(IllegalArgumentException.class);
+                .thenThrow(new AccountNotFoundException(""));
+        expectedException.expect(AccountNotFoundException.class);
         service.getAccount(3L);
     }
 
     @Test
-    public void retrieveAccount_Found() throws AccountStorage.AccountNotFoundException {
+    public void retrieveAccount_Found() throws AccountNotFoundException {
         Account storageAccount = new Account(5L, correctAccount);
         Mockito.when(storage.getAccount(Mockito.eq(5L)))
                 .thenReturn(storageAccount);

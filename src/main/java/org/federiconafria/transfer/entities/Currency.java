@@ -1,4 +1,4 @@
-package org.federiconafria.entities;
+package org.federiconafria.transfer.entities;
 
 import java.math.BigDecimal;
 
