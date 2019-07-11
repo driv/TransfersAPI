@@ -1,4 +1,4 @@
-package org.federiconafria.transfer.services;
+package org.federiconafria.transfer.services.interfaces;
 
 public interface AccountIdProvider {
 

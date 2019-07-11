@@ -1,4 +1,4 @@
-package org.federiconafria.transfer.services;
+package org.federiconafria.transfer.services.interfaces;
 
 import org.federiconafria.transfer.entities.Account;
 import org.federiconafria.transfer.services.exceptions.AccountNotFoundException;
