@@ -56,7 +56,7 @@ public class AccountResourceIntegrationTest extends JerseyTest {
         AccountResource.NewAccountDTO input = new AccountResource.NewAccountDTO();
         input.amount = "12.55";
         input.user = "testUser";
-        Response response = target("/accounts/").request().put(Entity.entity(input, MediaType.APPLICATION_JSON_TYPE));
+        Response response = target("/accounts/").request().post(Entity.entity(input, MediaType.APPLICATION_JSON_TYPE));
 
 
         assertEquals("Http response should be 200: ", Response.Status.OK.getStatusCode(), response.getStatus());

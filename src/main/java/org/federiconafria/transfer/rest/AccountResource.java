@@ -33,8 +33,7 @@ public class AccountResource {
         }
     }
 
-    @PUT
-    @Path("/")
+    @POST
     public Response createAccount(NewAccountDTO inputData) {
         Account newAccount = new AccountBuilder()
                 .setAmount(inputData.amount)
