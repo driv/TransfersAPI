@@ -1,12 +1,9 @@
 package org.federiconafria.transfer.services;
 
 import org.federiconafria.transfer.entities.Account;
-import org.federiconafria.transfer.entities.AccountBuilder;
 import org.federiconafria.transfer.services.exceptions.AccountNotFoundException;
 import org.federiconafria.transfer.services.interfaces.AccountIdProvider;
 import org.federiconafria.transfer.services.interfaces.AccountStorage;
-
-import java.math.BigDecimal;
 
 public class AccountService {
 
