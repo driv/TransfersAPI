@@ -10,7 +10,11 @@ public class Currency {
     }
 
     public static Currency valueOf(String amount) {
-        return new Currency(new BigDecimal(amount));
+        return valueOf(new BigDecimal(amount));
+    }
+
+    public static Currency valueOf(BigDecimal decimal) {
+        return new Currency(decimal);
     }
 
     public BigDecimal getAmount() {

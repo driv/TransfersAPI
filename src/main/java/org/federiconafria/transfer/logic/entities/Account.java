@@ -4,19 +4,19 @@ import java.util.Objects;
 
 public class Account {
     private final String user;
-    private final Currency amount;
+    private Currency balance;
     private final long id;
 
     Account(String user, Currency initialAmount) {
         this.user = user;
-        this.amount = initialAmount;
+        this.balance = initialAmount;
         this.id = 0;
     }
 
     public Account(long id, Account toCopy) {
         this.id = id;
         this.user = toCopy.user;
-        this.amount = toCopy.amount;
+        this.balance = toCopy.balance;
     }
 
     public long getId() {
@@ -27,8 +27,8 @@ public class Account {
         return user;
     }
 
-    public Currency getAmount() {
-        return amount;
+    public Currency getBalance() {
+        return balance;
     }
 
     @Override
@@ -43,5 +43,13 @@ public class Account {
     @Override
     public int hashCode() {
         return Objects.hash(getUser(), id);
+    }
+
+    public void withdraw(Currency amount) {
+        this.balance = Currency.valueOf(this.getBalance().getAmount().subtract(amount.getAmount()));
+    }
+
+    public void deposit(Currency amount) {
+        this.balance = Currency.valueOf(this.getBalance().getAmount().add(amount.getAmount()));
     }
 }

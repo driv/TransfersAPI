@@ -42,6 +42,14 @@ public class Transfer {
         return amount;
     }
 
+    public void execute() {
+        this.status = Status.EXECUTED;
+    }
+
+    public void fail() {
+        this.status = Status.FAILED;
+    }
+
     public Status getStatus() {
         return status;
     }
