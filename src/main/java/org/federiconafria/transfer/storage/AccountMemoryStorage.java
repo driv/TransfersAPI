@@ -1,8 +1,8 @@
 package org.federiconafria.transfer.storage;
 
 import org.federiconafria.transfer.entities.Account;
-import org.federiconafria.transfer.services.AccountStorage;
 import org.federiconafria.transfer.services.exceptions.AccountNotFoundException;
+import org.federiconafria.transfer.services.interfaces.AccountStorage;
 
 import java.util.HashMap;
 import java.util.Map;

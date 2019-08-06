@@ -1,12 +1,12 @@
 package org.federiconafria.transfer.storage;
 
-import org.federiconafria.transfer.services.AccountIdProvider;
+import org.federiconafria.transfer.services.interfaces.AccountIdProvider;
 
 public class MyAccountIdProvider implements AccountIdProvider {
-    private static long nextId = 0;
+    private long nextId = 0;
 
     @Override
-    public long generateNextId() {
+    public synchronized long generateNextId() {
         return ++nextId;
     }
 }
