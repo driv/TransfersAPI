@@ -48,7 +48,7 @@ public class AccountResource {
         AccountDTO outputData = new AccountDTO();
         outputData.id = account.getId();
         outputData.user = account.getUser();
-        outputData.amount = account.getAmount().getAmount().toString();
+        outputData.amount = account.getBalance().getAmount().toString();
         return outputData;
     }
 

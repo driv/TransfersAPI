@@ -1,16 +1,16 @@
 package org.federiconafria.transfer.rest;
 
+import org.federiconafria.transfer.logic.api.TransferQueue;
 import org.federiconafria.transfer.logic.entities.Account;
 import org.federiconafria.transfer.logic.entities.AccountBuilder;
+import org.federiconafria.transfer.logic.entities.Transfer;
 import org.federiconafria.transfer.logic.entities.TransferBuilder;
 import org.federiconafria.transfer.logic.exceptions.EntityCreationException;
 import org.federiconafria.transfer.logic.services.TransferService;
-import org.federiconafria.transfer.rest.AccountResource.AccountDTO;
 import org.federiconafria.transfer.rest.TransferResource.NewTransferDTO;
 import org.federiconafria.transfer.rest.TransferResource.TransferDTO;
 import org.federiconafria.transfer.storage.AccountMemoryStorage;
 import org.federiconafria.transfer.storage.MyIdProvider;
-import org.federiconafria.transfer.storage.TransferMemoryQueue;
 import org.federiconafria.transfer.storage.TransferMemoryStorage;
 import org.glassfish.hk2.api.Factory;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
@@ -33,7 +33,7 @@ public class TransferResourceIntegrationTest extends JerseyTest {
     protected Application configure() {
         AccountMemoryStorage accountStorage = new AccountMemoryStorage();
         transferService = new TransferService(
-                new TransferMemoryStorage(), new TransferMemoryQueue(), accountStorage, new MyIdProvider());
+                new TransferMemoryStorage(), new DummyQueue(), accountStorage, new MyIdProvider());
         try {
             Account sampleAccount = new AccountBuilder()
                     .setUser("tstUser")
@@ -96,7 +96,7 @@ public class TransferResourceIntegrationTest extends JerseyTest {
         assertEquals("HTTP code:", Response.Status.OK.getStatusCode(), response.getStatus());
         assertEquals("Media Type", MediaType.APPLICATION_JSON_TYPE, response.getMediaType());
         TransferDTO output = response.readEntity(TransferDTO.class);
-        assertEquals("ID", 2L, (long)output.id);
+        assertEquals("ID", 2L, (long) output.id);
         assertEquals("Status", "PENDING", output.status);
     }
 
@@ -114,6 +114,13 @@ public class TransferResourceIntegrationTest extends JerseyTest {
 
                 }
             }).to(TransferService.class);
+        }
+    }
+
+    private class DummyQueue implements TransferQueue {
+        @Override
+        public void queueTransfer(Transfer newTransfer) {
+
         }
     }
 }
