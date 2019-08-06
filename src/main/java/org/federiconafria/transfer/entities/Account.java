@@ -2,12 +2,12 @@ package org.federiconafria.transfer.entities;
 
 import java.util.Objects;
 
-public class Account implements Cloneable {
+public class Account {
     private final String user;
     private final Currency amount;
     private final long id;
 
-    public Account(String user, Currency initialAmount) {
+    Account(String user, Currency initialAmount) {
         this.user = user;
         this.amount = initialAmount;
         this.id = 0;

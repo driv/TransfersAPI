@@ -1,8 +1,10 @@
 package org.federiconafria.transfer.services;
 
 import org.federiconafria.transfer.entities.Account;
-import org.federiconafria.transfer.entities.Currency;
+import org.federiconafria.transfer.entities.AccountBuilder;
 import org.federiconafria.transfer.services.exceptions.AccountNotFoundException;
+import org.federiconafria.transfer.services.interfaces.AccountIdProvider;
+import org.federiconafria.transfer.services.interfaces.AccountStorage;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -26,7 +28,7 @@ public class AccountServiceTest {
     private AccountService service;
     @Captor
     private ArgumentCaptor<Account> insertedAccount;
-    private Account correctAccount = new Account("testUser", Currency.valueOf("5.00"));
+    private Account correctAccount = new AccountBuilder().setUser("testUser").setAmount("5.00").build();
 
     @Before
     public void init() {
@@ -48,7 +50,7 @@ public class AccountServiceTest {
     public void createAccount_negativeAmount_shouldThrowException() {
         expectedException.expect(IllegalArgumentException.class);
 
-        service.createAccount(new Account("testUser", Currency.valueOf("-5")));
+        service.createAccount(new AccountBuilder().setUser("testUser").setAmount("-5").build());
 
         Mockito.verify(storage, Mockito.never()).insertAccount(Mockito.any());
     }

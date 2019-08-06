@@ -1,7 +1,10 @@
 package org.federiconafria.transfer.services;
 
 import org.federiconafria.transfer.entities.Account;
+import org.federiconafria.transfer.entities.AccountBuilder;
 import org.federiconafria.transfer.services.exceptions.AccountNotFoundException;
+import org.federiconafria.transfer.services.interfaces.AccountIdProvider;
+import org.federiconafria.transfer.services.interfaces.AccountStorage;
 
 import java.math.BigDecimal;
 
@@ -15,20 +18,19 @@ public class AccountService {
         this.idProvider = idProvider;
     }
 
-    public void createAccount(Account inputData) {
+    public Account createAccount(Account inputData) {
         if (inputData == null) throw new IllegalArgumentException("Account should not be null");
-        if (inputData.getUser() == null) throw new IllegalArgumentException("Invalid user");
-        if (inputData.getAmount() == null || inputData.getAmount().getAmount().compareTo(BigDecimal.ZERO) < 0)
-            throw new IllegalArgumentException("Amount should be a positive number");
 
-        storage.insertAccount(new Account(idProvider.generateNextId(), inputData));
-    }
-
-    public Account getAccount(long id) throws AccountNotFoundException {
+        long id = idProvider.generateNextId();
+        storage.insertAccount(new Account(id, inputData));
         try {
             return storage.getAccount(id);
         } catch (AccountNotFoundException e) {
-            throw e;
+            throw new IllegalStateException("The created account cannot be found");
         }
+    }
+
+    public Account getAccount(long id) throws AccountNotFoundException {
+        return storage.getAccount(id);
     }
 }
