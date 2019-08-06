@@ -1,5 +1,10 @@
 plugins {
-    id 'java'
+    id 'war'
+    id 'application'
+}
+
+application {
+    mainClassName = 'org.federiconafria.transfer.App'
 }
 
 group 'org.federiconafria'
