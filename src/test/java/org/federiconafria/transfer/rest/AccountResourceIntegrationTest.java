@@ -1,9 +1,12 @@
 package org.federiconafria.transfer.rest;
 
-import org.federiconafria.transfer.entities.AccountBuilder;
-import org.federiconafria.transfer.services.AccountService;
+import org.federiconafria.transfer.logic.entities.AccountBuilder;
+import org.federiconafria.transfer.logic.services.AccountService;
+import org.federiconafria.transfer.logic.exceptions.EntityCreationException;
+import org.federiconafria.transfer.rest.AccountResource.AccountDTO;
+import org.federiconafria.transfer.rest.AccountResource.NewAccountDTO;
 import org.federiconafria.transfer.storage.AccountMemoryStorage;
-import org.federiconafria.transfer.storage.MyAccountIdProvider;
+import org.federiconafria.transfer.storage.MyIdProvider;
 import org.glassfish.hk2.api.Factory;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -23,11 +26,15 @@ public class AccountResourceIntegrationTest extends JerseyTest {
 
     @Override
     protected Application configure() {
-        accountService = new AccountService(new AccountMemoryStorage(), new MyAccountIdProvider());
-        accountService.createAccount(new AccountBuilder()
-                .setUser("testUser")
-                .setAmount("12.50")
-                .build());
+        accountService = new AccountService(new AccountMemoryStorage(), new MyIdProvider());
+        try {
+            accountService.createAccount(new AccountBuilder()
+                    .setUser("testUser")
+                    .setAmount("12.50")
+                    .build());
+        } catch (EntityCreationException e) {
+            throw new IllegalArgumentException(e);
+        }
         return new ResourceConfig(AccountResource.class)
                 .register(new Binder());
     }
@@ -45,7 +52,7 @@ public class AccountResourceIntegrationTest extends JerseyTest {
 
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
         assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getMediaType());
-        AccountResource.AccountDTO output = response.readEntity(AccountResource.AccountDTO.class);
+        AccountDTO output = response.readEntity(AccountDTO.class);
         assertEquals("testUser", output.user);
         assertEquals("12.50", output.amount);
         assertEquals(1, output.id);
@@ -53,16 +60,25 @@ public class AccountResourceIntegrationTest extends JerseyTest {
 
     @Test
     public void createAccount_correctRequest_OKResponse() {
-        AccountResource.NewAccountDTO input = new AccountResource.NewAccountDTO();
+        NewAccountDTO input = new NewAccountDTO();
         input.amount = "12.55";
         input.user = "testUser";
         Response response = target("/accounts/").request().post(Entity.entity(input, MediaType.APPLICATION_JSON_TYPE));
 
-
         assertEquals("Http response should be 200: ", Response.Status.OK.getStatusCode(), response.getStatus());
         assertEquals("It should be JSON", MediaType.APPLICATION_JSON_TYPE, response.getMediaType());
-        AccountResource.AccountDTO output = response.readEntity(AccountResource.AccountDTO.class);
+        AccountDTO output = response.readEntity(AccountDTO.class);
         assertEquals(2, output.id);
+    }
+
+    @Test
+    public void createAccount_IncorrectAmount_BadRequestResponse() {
+        NewAccountDTO input = new NewAccountDTO();
+        input.amount = "-12.55";
+        input.user = "testUser";
+        Response response = target("/accounts/").request().post(Entity.entity(input, MediaType.APPLICATION_JSON_TYPE));
+
+        assertEquals("Http response should be 400: ", Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 
     class Binder extends AbstractBinder {

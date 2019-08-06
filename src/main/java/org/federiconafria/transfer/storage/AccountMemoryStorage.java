@@ -1,15 +1,15 @@
 package org.federiconafria.transfer.storage;
 
-import org.federiconafria.transfer.entities.Account;
-import org.federiconafria.transfer.services.exceptions.AccountNotFoundException;
-import org.federiconafria.transfer.services.interfaces.AccountStorage;
+import org.federiconafria.transfer.logic.api.AccountStorage;
+import org.federiconafria.transfer.logic.entities.Account;
+import org.federiconafria.transfer.logic.exceptions.EntityNotFoundException;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class AccountMemoryStorage implements AccountStorage {
 
-    private Map<Long, Account> accounts = new HashMap<>();
+    private Map<Long, Account> accounts = new ConcurrentHashMap<>();
 
     @Override
     public void insertAccount(Account account) {
@@ -17,11 +17,11 @@ public class AccountMemoryStorage implements AccountStorage {
     }
 
     @Override
-    public Account getAccount(long id) throws AccountNotFoundException {
+    public Account getAccount(long id) throws EntityNotFoundException {
         if (accounts.containsKey(id)) {
             return accounts.get(id);
         } else {
-            throw new AccountNotFoundException(String.format("Account %s not found", id));
+            throw new EntityNotFoundException(String.format("Account %s not found", id));
         }
     }
 }

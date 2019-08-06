@@ -1,4 +1,6 @@
-package org.federiconafria.transfer.entities;
+package org.federiconafria.transfer.logic.entities;
+
+import org.federiconafria.transfer.logic.exceptions.EntityCreationException;
 
 import java.math.BigDecimal;
 
@@ -16,10 +18,10 @@ public class AccountBuilder {
         return this;
     }
 
-    public Account build() {
-        if (user == null) throw new IllegalArgumentException("Invalid user");
+    public Account build() throws EntityCreationException {
+        if (user == null) throw new EntityCreationException("Invalid user");
         if (amount == null || amount.getAmount().compareTo(BigDecimal.ZERO) < 0)
-            throw new IllegalArgumentException("Amount should be a positive number");
+            throw new EntityCreationException("Amount should be a positive number");
         return new Account(user, amount);
     }
 }

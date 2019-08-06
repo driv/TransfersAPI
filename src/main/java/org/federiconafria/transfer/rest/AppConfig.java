@@ -1,8 +1,8 @@
 package org.federiconafria.transfer.rest;
 
-import org.federiconafria.transfer.services.AccountService;
+import org.federiconafria.transfer.logic.services.AccountService;
 import org.federiconafria.transfer.storage.AccountMemoryStorage;
-import org.federiconafria.transfer.storage.MyAccountIdProvider;
+import org.federiconafria.transfer.storage.MyIdProvider;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
 
@@ -13,7 +13,7 @@ public class AppConfig extends ResourceConfig {
 
     public AppConfig() {
         packages("org.federiconafria.transfer.rest");
-        AccountService accountService = new AccountService(new AccountMemoryStorage(), new MyAccountIdProvider());
+        AccountService accountService = new AccountService(new AccountMemoryStorage(), new MyIdProvider());
         register(new AbstractBinder() {
             @Override
             protected void configure() {

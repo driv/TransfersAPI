@@ -1,9 +1,10 @@
 package org.federiconafria.transfer.rest;
 
-import org.federiconafria.transfer.entities.Account;
-import org.federiconafria.transfer.entities.AccountBuilder;
-import org.federiconafria.transfer.services.AccountService;
-import org.federiconafria.transfer.services.exceptions.AccountNotFoundException;
+import org.federiconafria.transfer.logic.entities.Account;
+import org.federiconafria.transfer.logic.entities.AccountBuilder;
+import org.federiconafria.transfer.logic.exceptions.EntityCreationException;
+import org.federiconafria.transfer.logic.exceptions.EntityNotFoundException;
+import org.federiconafria.transfer.logic.services.AccountService;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -21,12 +22,8 @@ public class AccountResource {
     public Response getAccount(@PathParam("id") long id) {
         try {
             Account account = service.getAccount(id);
-            AccountDTO outputData = new AccountDTO();
-            outputData.id = account.getId();
-            outputData.amount = account.getAmount().getAmount().toString();
-            outputData.user = account.getUser();
-            return Response.ok(outputData).build();
-        } catch (AccountNotFoundException e) {
+            return Response.ok(getOutputData(account)).build();
+        } catch (EntityNotFoundException e) {
             return Response
                     .status(Response.Status.NOT_FOUND)
                     .build();
@@ -35,16 +32,24 @@ public class AccountResource {
 
     @POST
     public Response createAccount(NewAccountDTO inputData) {
-        Account newAccount = new AccountBuilder()
-                .setAmount(inputData.amount)
-                .setUser(inputData.user)
-                .build();
-        Account account = service.createAccount(newAccount);
+        try {
+            Account newAccount = new AccountBuilder()
+                    .setAmount(inputData.amount)
+                    .setUser(inputData.user)
+                    .build();
+            Account account = service.createAccount(newAccount);
+            return Response.ok(getOutputData(account)).build();
+        } catch (EntityCreationException e) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+
+    private AccountDTO getOutputData(Account account) {
         AccountDTO outputData = new AccountDTO();
         outputData.id = account.getId();
         outputData.user = account.getUser();
         outputData.amount = account.getAmount().getAmount().toString();
-        return Response.ok(outputData).build();
+        return outputData;
     }
 
     public static class NewAccountDTO {
