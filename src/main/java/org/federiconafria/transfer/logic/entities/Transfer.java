@@ -18,12 +18,20 @@ public class Transfer {
         this.status = Status.PENDING;
     }
 
-    public Transfer(long id, Transfer transfer) {
+    public Transfer(long id, Transfer toCopy) {
         this.id = id;
-        this.idSourceAccount = transfer.idSourceAccount;
-        this.idDestinationAccount = transfer.idDestinationAccount;
-        this.amount = transfer.amount;
-        this.status = transfer.status;
+        this.idSourceAccount = toCopy.idSourceAccount;
+        this.idDestinationAccount = toCopy.idDestinationAccount;
+        this.amount = toCopy.amount;
+        this.status = toCopy.status;
+    }
+
+    public Transfer(Transfer toCopy) {
+        this.id = toCopy.id;
+        this.idSourceAccount = toCopy.idSourceAccount;
+        this.idDestinationAccount = toCopy.idDestinationAccount;
+        this.amount = toCopy.amount;
+        this.status = toCopy.status;
     }
 
     public Long getId() {

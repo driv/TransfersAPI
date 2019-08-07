@@ -13,13 +13,13 @@ public class AccountMemoryStorage implements AccountStorage {
 
     @Override
     public void insertAccount(Account account) {
-        accounts.put(account.getId(), account);
+        accounts.put(account.getId(), new Account(account));
     }
 
     @Override
     public Account getAccount(long id) throws EntityNotFoundException {
         if (accounts.containsKey(id)) {
-            return accounts.get(id);
+            return new Account(accounts.get(id));
         } else {
             throw new EntityNotFoundException(String.format("Account %s not found", id));
         }

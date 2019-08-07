@@ -19,6 +19,12 @@ public class Account {
         this.balance = toCopy.balance;
     }
 
+    public Account(Account toCopy) {
+        this.id = toCopy.id;
+        this.user = toCopy.user;
+        this.balance = toCopy.balance;
+    }
+
     public long getId() {
         return id;
     }
