@@ -2,7 +2,8 @@
 
 ## Execute
 
-Decompressing the `TransfersAPI-1.0-SNAPSHOT.zip` you can find in the bin directory both `TransferAPI` and `TransferAPI.bat`.
+Decompressing any of the [released bynaries](https://github.com/driv/TransfersAPI/releases) you can find in the bin directory both `TransferAPI` and `TransferAPI.bat`.
+
 The server will be started on port `8080`.
 
 ## Demo
@@ -12,8 +13,8 @@ The demo assumes that there is no data on the server and that the server is runn
 
 ## Build
 
-`gradlew build` build the project
-`gradlew assemble` generates deliverables
-`gradelw run` starts the server. (it's not handling properly shutdown)
+- `gradlew build` build the project
+- `gradlew assemble` generates deliverables
+- `gradelw run` starts the server. (it's not handling properly shutdown)
 
 
