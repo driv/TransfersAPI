@@ -1,13 +1,13 @@
-package org.federiconafria.transfer.logic;
+package org.federiconafria.transfer.logic.services;
 
-import org.federiconafria.transfer.logic.entities.Transfer;
-import org.federiconafria.transfer.logic.entities.TransferBuilder;
-import org.federiconafria.transfer.logic.exceptions.EntityCreationException;
-import org.federiconafria.transfer.logic.exceptions.EntityNotFoundException;
 import org.federiconafria.transfer.logic.api.AccountStorage;
 import org.federiconafria.transfer.logic.api.IdProvider;
 import org.federiconafria.transfer.logic.api.TransferQueue;
 import org.federiconafria.transfer.logic.api.TransferStorage;
+import org.federiconafria.transfer.logic.entities.Transfer;
+import org.federiconafria.transfer.logic.entities.TransferBuilder;
+import org.federiconafria.transfer.logic.exceptions.EntityCreationException;
+import org.federiconafria.transfer.logic.exceptions.EntityNotFoundException;
 import org.federiconafria.transfer.logic.services.TransferService;
 import org.junit.Before;
 import org.junit.Test;
@@ -70,7 +70,7 @@ public class TransferServiceTest {
     }
 
     @Test(expected = EntityCreationException.class)
-    public void createTransfer_InexistentSourceAccount_ShouldFAIL() throws  EntityCreationException {
+    public void createTransfer_InexistentSourceAccount_ShouldFAIL() throws EntityCreationException {
         Transfer newTransfer = makeTransfer(11L, 2L);
 
         try {
@@ -82,11 +82,21 @@ public class TransferServiceTest {
     }
 
     @Test(expected = EntityCreationException.class)
-    public void createTransfer_InexistentDestinationAccount_ShouldFAIL() throws  EntityCreationException {
+    public void createTransfer_InexistentDestinationAccount_ShouldFAIL() throws EntityCreationException {
         Transfer newTransfer = makeTransfer(1L, 11L);
 
         try {
             service.createTransfer(newTransfer);
+        } finally {
+            Mockito.verify(storage, never()).insertTransfer(any());
+            Mockito.verify(queue, never()).queueTransfer(any());
+        }
+    }
+
+    @Test(expected = EntityCreationException.class)
+    public void createTransfer_SameAccounts_ShouldFAIL() throws EntityCreationException {
+        try {
+            service.createTransfer(makeTransfer(1L, 1L));
         } finally {
             Mockito.verify(storage, never()).insertTransfer(any());
             Mockito.verify(queue, never()).queueTransfer(any());

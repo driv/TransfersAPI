@@ -27,6 +27,8 @@ public class TransferBuilder {
     public Transfer build() throws EntityCreationException {
         if (amount == null || amount.getAmount().compareTo(BigDecimal.ZERO) <= 0)
             throw new EntityCreationException("Transfer amount should be positive");
+        if (idSourceAccount == idDestinationAccount)
+            throw new EntityCreationException("Transfer should be to a different account");
         return new Transfer(idSourceAccount, idDestinationAccount, amount);
     }
 }

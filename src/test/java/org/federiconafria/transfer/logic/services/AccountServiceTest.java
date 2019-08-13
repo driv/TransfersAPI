@@ -1,4 +1,4 @@
-package org.federiconafria.transfer.logic;
+package org.federiconafria.transfer.logic.services;
 
 import org.federiconafria.transfer.logic.entities.Account;
 import org.federiconafria.transfer.logic.entities.AccountBuilder;
